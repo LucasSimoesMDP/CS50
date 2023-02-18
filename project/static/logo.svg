@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1667" height="342" viewBox="0 0 1667 342">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 200px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #991032;
+        font-family: "Qatar2022 Arabic";
+        font-weight: 800;
+      }
+
+      .cls-2 {
+        font-size: 112px;
+      }
+    </style>
+  </defs>
+  <text id="WordleCup_" data-name="WordleCup " class="cls-1" x="258.61" y="179">WordleCup </text>
+  <text id="Qatar_2022_Edition" data-name="Qatar 2022 Edition" class="cls-2" x="299.61" y="286">Qatar 2022 Edition</text>
+</svg>

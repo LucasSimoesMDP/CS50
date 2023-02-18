@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+
+{% block header %}
+
+<header>
+    <h1><img src="/static/logo.svg" width="460px" height="90px"></h1>
+    <div class="container">
+        <div class="search-bar" id="container">
+            <h2>
+                {% if attempts < 10 %}
+                <input type="text" autocomplete="off" aria-autocomplete="list" placeholder="Guess here" autofocus>
+                <ul class="list-group list-group-flush"></ul>
+                {% else %}
+                <input type="text" autocomplete="off" aria-autocomplete="list" placeholder="No guesses left" autofocus disabled>
+                {% endif %}
+            </h2>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-start">Full name</th>
+                    <th class="text-start">Nation</th>
+                    <th class="text-start">Continent</th>
+                    <th class="text-start">Group</th>
+                    <th class="text-start">Age</th>
+                    <th class="text-start">Position</th>
+                    <th class="text-start">Shirt Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if guess != [] %}
+                {% for guess in guess %} <tr>
+                    <td id='fullname' class="text-start">
+                        {{ guess.guess_full_name }}
+                    </td>
+                    <td id='nation' class="text-start">
+                        {% if guess.guess_nation == answer[0]['nation'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_nation }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess.guess_nation }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='continent' class="text-start">
+                        {% if guess.guess_continent == answer[0]['continent'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_continent }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess.guess_continent }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='group' class="text-start">
+                        {% if guess.guess_wc_group == answer[0]['wc_group'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_wc_group }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess.guess_wc_group }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='age' class="text-start">
+                        {% if guess.guess_age == answer[0]['age'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_age }}
+                        </span>
+                        {% elif guess.guess_age> (answer[0]['age']-2) and guess.guess_age< (answer[0]['age'] +2) %}
+                            <span class=" badge bg-warning ">
+                            {{ guess.guess_age }}
+                            </span>
+                            {% else %}
+                            <span class=" badge bg-danger ">
+                                {{ guess.guess_age }}
+                            </span>
+                            {% endif %}
+                    </td>
+                    <td id='position' class="text-start">
+                        {% if guess.guess_position == answer[0]['position'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_position }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess.guess_position }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='shirtNumber' class="text-start">
+                        {% if guess.guess_shirt_number == answer[0]['shirt_number'] %}
+                        <span class=" badge bg-success ">
+                            {{ guess.guess_shirt_number }}
+                        </span>
+                        {% elif guess.guess_shirt_number > (answer[0]['shirt_number'] - 3) and
+                        guess.guess_shirt_number < (answer[0]['shirt_number'] + 3) %} <span class=" badge bg-warning ">
+                            {{ guess.guess_shirt_number }}
+                            </span>
+                            {% else %}
+                            <span class=" badge bg-danger ">
+                                {{ guess.guess_shirt_number }}
+                            </span>
+                            {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+            <h1><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#answerModal">Show Silhouette </button></h1>
+            <!-- Modal -->
+            <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                        <img src="/static/whoami.png" class="rounded mx-auto d-block" >
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="guess-image">
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <script>
+                answer = {{ answer | tojson }};
+                document.getElementById('guess-image').innerHTML = '<h3><img src="/static/players_faces_ALL/'+ answer[0]['id'] +'-n.png" class="card-img-top-center" alt="answer-face" id="answerface"></h3>';
+                //Using data from w3schools and jquery's official documentation
+                function userChoice(guess) {
+                    $.ajax({
+                        url: "/redirect",
+                        type: "POST",
+                        dataType: 'json',
+                        contentType: "application/json",
+                        data: JSON.stringify(guess),
+                        success: function (response) {
+                            window.location.href = response.redirect
+                        }
+                    });
+                    //Thanks to Faraz Kelhini from medium.com and people from cs50's discord for giving me a clear understading of how to debounce the user's input
+                    //Link to Faraz's post: https://medium.com/pragmatic-programmers/debouncing-in-javascript-4c6dd704695a
+                }
+                function debounce(callback, limit) {
+                    let timeout;
+                    return () => {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => {
+                            callback();
+                        }, limit);
+                    };
+                }
+                async function playersInput() {
+                    let response = await fetch('/search?q=' + input.value);
+                    let players = await response.json();
+                    let html = '';
+                    for (let id in players) {
+                        let name = players[id].full_name.replace('<', '&lt;').replace('&', '&amp;');
+                        html += '<button href="#" onclick="userChoice(' + players[id].id + ')" class="list-group-item list-group-item-action">' + name + '</button>';
+                    }
+                    document.querySelector('ul.list-group-flush').innerHTML = html;
+                }
+                const debouncedPlayersInput = debounce(playersInput,300);
+                const input = document.querySelector('input');
+                input.addEventListener('input', debouncedPlayersInput);
+            </script>
+    </div>
+</header>
+{% endblock %}

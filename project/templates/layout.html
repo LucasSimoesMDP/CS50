@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- http://getbootstrap.com/docs/5.1/ -->
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" rel="stylesheet">
+  <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+  <link href="/static/logo.svg" class="logo">
+  <link href="/static/styles.css" rel="stylesheet">
+
+  <title>WordleCup Qatar 2022 | {% block title %}{% endblock %}</title>
+
+</head>
+
+<body>
+  <div class="top bar">
+    <nav class="navbar navbar-custom ">
+      <div class="container justify-content-center">
+        <button class='navbar-brand text-light' data-bs-toggle="modal" data-bs-target="#howToPlayModal">
+          <strong>
+            <p>HOW TO PLAY</p>
+          </strong>
+        </button>
+        {% if session["user_id"] %}
+        <button class="navbar-brand text-light" data-bs-toggle="modal" data-bs-target="#statsModal">
+          <strong>
+            <p>STATS</p>
+          </strong>
+        </button>
+        <a class="navbar-brand text-light" href="/logout">
+          <strong>
+            <p> LOG OUT</p>
+          </strong>
+        </a>
+        <span class="navbar-brand text-light mt-auto" >
+          Logged in as: {{user_info[0]['username']}}
+        </span>
+        {% else %}
+        <a class="navbar-brand nav-link text-light" href="/register">
+          <strong>
+            <p>REGISTER</p>
+          </strong>
+        </a>
+        <a class="navbar-brand nav-link text-light" href="/login">
+          <strong>
+            <p>LOGIN</p>
+          </strong>
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+  <!-- How to play Modal -->
+  <div class="modal fade" id="howToPlayModal" tabindex="-1" aria-labelledby="howToPlayModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="howToPlayModalLabel">How to play</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item">You will have 10 attempts to guess the mystery player. New player every 24 hours! </li>
+            <li class="list-group-item ">If you find <span class=" badge bg-success ">this green background</span>
+                you have a match in the column! </li>
+            <li class="list-group-item ">If you find <span class=" badge bg-warning ">this yellow background</span>
+                in the <b>'Age'</b> column, the age is within the range of two years. </li>
+            <li class="list-group-item ">If you find <span class=" badge bg-warning ">this yellow background</span>
+                in the <b>'Shirt number'</b> column, the number of the shirt is within the range of three numbers. </li>
+            <li class="list-group-item ">If you find <span class=" badge bg-danger ">this red background</span> you
+                don't have a match in the column. You will have to take another guess. </li>
+            <li class="list-group-item">If it's getting too difficult, you can use the Special Silhouette! (It
+                will be way harder but, just to get an idea, you can try this example)
+                <div class="card mb-3 " style="max-width: 180px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="/static/noshow.png" class="card-img-top-center" style="display: none" alt="Mr.X"
+                                id="noshow">
+                        </div>
+                        <div class="col-md-8"></div>
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary" onclick="show_image_example()">Show
+                                Silhouette</button>
+                            <script>
+                                function show_image_example() {
+                                    var image = document.getElementById('noshow');
+                                    if (image.style.display === "none") {
+                                        image.style.display = "block";
+                                    }
+                                    else {
+                                        image.style.display = "none";
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Stats Modal -->
+  {% if session["user_id"] %}
+  <div class="modal fade" id="statsModal" tabindex="-1" aria-labelledby="statsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statsLabel">STATS</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item"> GAMES PLAYED: {{ user_info[0]['games_played'] }}</li>
+            <li class="list-group-item "> POINTS: {{ user_info[0]['points'] }}</li>
+            <li class="list-group-item">GAMES WON: {{ user_info[0]['games_won'] }}</li>
+            <li class="list-group-item"> WIN PORCENTAGE: {{ user_info[0]['win_porcentage'] }} %</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+</body>
+
+</html>

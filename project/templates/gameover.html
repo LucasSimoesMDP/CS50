@@ -1,0 +1,295 @@
+{% extends "layout.html" %}
+
+{% block header %}
+
+<header>
+    <h1><img src="/static/logo.svg" width="460px" height="90px"></h1>
+    <div class="container">
+        <div class="search-bar" id="container">
+            <h2>
+                <input type="text" autocomplete="off" aria-autocomplete="list" placeholder="No guesses left" autofocus
+                    disabled>
+            </h2>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-start">Full name</th>
+                    <th class="text-start">Nation</th>
+                    <th class="text-start">Continent</th>
+                    <th class="text-start">Group</th>
+                    <th class="text-start">Age</th>
+                    <th class="text-start">Position</th>
+                    <th class="text-start">Shirt Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if guess != [] %}
+                {% for n in range(10) %}
+                {% if n == 9 %}
+                <tr class="bg-danger">
+                    {% else %}
+                <tr>
+                    {% endif %}
+                    <td id='fullname' class="text-start">
+                        {% if guess[n]['guess_full_name'] == answer[0]['full_name']%}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_full_name'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_full_name'] }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='nation' class="text-start">
+                        {% if guess[n]['guess_nation'] == answer[0]['nation'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_nation'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_nation'] }}
+                        </span>
+                        {% endif %}
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_nation'] }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='continent' class="text-start">
+                        {% if guess[n]['guess_continent'] == answer[0]['continent'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_continent'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_continent'] }}
+                        </span>
+                        {% endif %}
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_continent'] }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='group' class="text-start">
+                        {% if guess[n]['guess_wc_group'] == answer[0]['wc_group'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_wc_group'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_wc_group'] }}
+                        </span>
+                        {% endif %}
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_wc_group'] }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='age' class="text-start">
+                        {% if guess[n]['guess_age'] == answer[0]['age'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_age'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_age'] }}
+                        </span>
+                        {% endif %}
+                        {% elif guess[n]['guess_age']> (answer[0]['age']-2) and guess[n]['guess_age']< (answer[0]['age']
+                            +2) %} {% if n==9 %} <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_age'] }}
+                            </span>
+                            {% else %}
+                            <span class=" badge bg-warning ">
+                                {{ guess[n]['guess_age'] }}
+                            </span>
+                            {% endif %}
+                            {% else %}
+                            <span class=" badge bg-danger ">
+                                {{ guess[n]['guess_age'] }}
+                            </span>
+                            {% endif %}
+                    </td>
+                    <td id='position' class="text-start">
+                        {% if guess[n]['guess_position'] == answer[0]['position'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_position'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_position'] }}
+                        </span>
+                        {% endif %}
+                        {% else %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_position'] }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td id='shirtNumber' class="text-start">
+                        {% if guess[n]['guess_shirt_number'] == answer[0]['shirt_number'] %}
+                        {% if n == 9 %}
+                        <span class=" badge bg-danger ">
+                            {{ guess[n]['guess_shirt_number'] }}
+                        </span>
+                        {% else %}
+                        <span class=" badge bg-success ">
+                            {{ guess[n]['guess_shirt_number'] }}
+                        </span>
+                        {% endif %}
+                        {% elif guess[n]['guess_shirt_number'] > (answer[0]['shirt_number'] - 3) and
+                        guess[n]['guess_shirt_number'] < (answer[0]['shirt_number'] + 3) %} {% if n==9 %} <span
+                            class=" badge bg-danger ">
+                            {{ guess[n]['guess_shirt_number'] }}
+                            </span>
+                            {% else %}
+                            <span class=" badge bg-warning ">
+                                {{ guess[n]['guess_shirt_number'] }}
+                            </span>
+                            {% endif %}
+                            {% else %}
+                            <span class=" badge bg-danger ">
+                                {{ guess[n]['guess_shirt_number'] }}
+                            </span>
+                            {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+            <!-- Button trigger modal -->
+            <h1><button type="button" class="btn btn-primary" data-toggle="modal" onclick="show_result()"
+                    data-target="#answerModal">Show result</button></h1>
+            <!-- Modal -->
+            {% for answer in answer %}
+            <div class="modal fade" id="answerModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5> It was me, {{ answer.full_name }}... you've lost!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="guess-image">
+                        </div>
+                        <h5>Game will reset in <p id='cooldown'></p>
+                        </h5>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <script>
+                answer = {{ answer | tojson }};
+                document.getElementById('guess-image').innerHTML = '<h3><img src="/static/players_faces_ALL/' + answer[0]['id'] + '-f.png" class="card-img-top-center" alt="answer-face" id="answerface"></h3>';
+                $(document).ready(show_result);
+                function show_result() {
+                    $("#answerModal").modal('show');
+                }
+                //Using documentation from Developer.Mozilla/GeeksforGeeks/w3schools (https://www.w3schools.com/howto/howto_js_countdown.asp)
+                var func = setInterval(function () {
+                    var now = new Date();
+                    var utc_now = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                        now.getUTCDate(), now.getUTCHours(),
+                        now.getUTCMinutes(), now.getUTCSeconds());
+                    //'How to convert a Date to UTC?' -> Solved with help from DrunkCoder and RobG (Stackoverflow forum)
+                    //Official post: https://stackoverflow.com/questions/948532/how-to-convert-a-date-to-utc
+                    UTC_now_copy = [];
+                    UTC_now_copy[1] = now.toISOString().slice(11, 19);//Today's time FORMAT HH:MM:SS
+                    var UTC_now_copy_split = UTC_now_copy[1].split(':');
+                    total = [];
+
+                    var custom_Time = '15:00:00'; //Default time (Changeable for debugging purposes)
+                    var custom_Time_array = custom_Time.split(':');
+
+                    if (parseInt(UTC_now_copy_split[0]) >= 00 && parseInt(UTC_now_copy_split[0]) < parseInt(custom_Time_array[0])/*15*/) {
+                        total = time_calculator(parseInt(UTC_now_copy_split[0]), parseInt(UTC_now_copy_split[1]), parseInt(UTC_now_copy_split[2]), parseInt(custom_Time_array[0]), parseInt(custom_Time_array[1]), parseInt(custom_Time_array[2]), 1);
+                    }
+                    else {
+                        total = time_calculator(parseInt(UTC_now_copy_split[0]), parseInt(UTC_now_copy_split[1]), parseInt(UTC_now_copy_split[2]), parseInt(custom_Time_array[0]), parseInt(custom_Time_array[1]), parseInt(custom_Time_array[2]), 2);
+                    }
+
+                    function time_calculator(hours, minutes, seconds, established_hours, established_minutes, established_seconds, casetype) {
+                        var temp = [];
+                        if (casetype == 1) //Case 1 == when hours are between 0 and 15
+                        {
+
+                            temp[0] = established_hours - hours;
+                            temp[1] = established_minutes - minutes;
+                            temp[2] = established_seconds - seconds;
+                            if (temp[2] < 0) {
+                                temp[2] = temp[2] + 60;
+                                temp[1] = temp[1] - 1;
+                            }
+                            if (temp[1] < 0) {
+                                temp[1] = temp[1] + 60;
+                                temp[0] = temp[0] - 1;
+                            }
+                        }
+                        if (casetype == 2) // Case 2 == when hours are between 15 and 23
+                        {
+                            temp[0] = hours - established_hours;
+                            temp[1] = minutes - established_minutes;
+                            temp[2] = seconds - established_seconds;
+
+                            temp[0] = 24 - temp[0];
+                            temp[1] = 00 - temp[1];
+                            temp[2] = 00 - temp[2];
+                            if (temp[2] < 0) {
+                                temp[2] = temp[2] + 60;
+                                temp[1] = temp[1] - 1;
+                            }
+                            if (temp[1] < 0) {
+                                temp[1] = temp[1] + 60;
+                                temp[0] = temp[0] - 1;
+                            }
+                        }
+                        return temp;
+                    }
+                    var total_to_seconds = (+total[0]) * 60 * 60 + (+total[1]) * 60 + (+total[2]);
+                    var total_to_milliseconds = total_to_seconds * 1000;
+
+                    // Time calculations for days, hours, minutes and seconds, based on w3schools documentation
+                    var hours = Math.floor((total_to_milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((total_to_milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((total_to_milliseconds % (1000 * 60)) / 1000);
+
+                    // Output the result in an element with id="demo"
+                    document.getElementById("cooldown").innerHTML = hours + "h "
+                        + minutes + "m " + seconds + "s ";
+                    // If the count down is over, write some text
+                    if (total[0] == 24 && total[1] == 0 && total[2] == 0) {
+                        let ready = 1;
+                        timeIsUp(ready);
+                        clearInterval(func);
+                        //Using data from w3schools and jquery's official documentation
+                        function timeIsUp(ready) {
+                            $.ajax({
+                                url: "/cooldown",
+                                type: "POST",
+                                dataType: 'json',
+                                contentType: "application/json",
+                                data: JSON.stringify(ready),
+                                success: function (response) {
+                                    window.location.href = response.redirect
+                                }
+                            });
+                        }
+                    }
+                }, 1000);
+            </script>
+    </div>
+</header>
+{% endblock %}
