@@ -1,5 +1,4 @@
 # WordleCup
-#### Video Demo:  https://www.youtube.com/watch?v=DPLmAszPfwQ
 #### Description:
 
 When i started this final proyect required by cs50, my idea was to adapt the Wordle Game combined into the football world.
