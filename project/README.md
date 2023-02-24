@@ -1,4 +1,6 @@
 # WordleCup
+OLD VERSION - SQL MANAGED WITH SQLite3 
+
 #### Description:
 
 When i started this final proyect required by cs50, my idea was to adapt the Wordle Game combined into the football world.
