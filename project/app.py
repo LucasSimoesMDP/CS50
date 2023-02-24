@@ -22,11 +22,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-#db = SQL("sqlite:///game.db")
-uri = os.getenv("DATABASE_URL")
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://")
-db = SQL(uri)
+db = SQL("sqlite:///game.db")
+#uri = os.getenv("DATABASE_URL")
+#if uri.startswith("postgres://"):
+#    uri = uri.replace("postgres://", "postgresql://")
+#db = SQL(uri)
 
 # Global correct option
 correct_option = db.execute('SELECT * FROM players ORDER BY RANDOM() LIMIT 1')
